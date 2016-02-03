@@ -23,7 +23,8 @@ I personally used Qt 5.5 & MinGW32 4.9.2 while developing this and I only provid
 
 ### UML Diagram, clientside relations
 
-![UML Diagram, simplified](images/client_hierarchy_simple.png "Very rough diagram showing the interaction between the MQTT & OPC UA client objects.")
+![UML Diagram, simplified](images/client_hierarchy_simple.png "Rough UML diagram.")
+_Very rough diagram showing the interaction between the MQTT & OPC UA client objects._
 
 1. Subscription to node data change events is made on the OpcUa-side via client GUI.
 2. Node value changes.
@@ -37,5 +38,6 @@ I personally used Qt 5.5 & MinGW32 4.9.2 while developing this and I only provid
 ### Screenshot of client GUI
 
 ![Gateway client GUI](images/gateway_client_gui.png "Screenshot of the Gateway client.")
+_Screenshot of the Gateway client._
 
 Screenshot showing the GUI of the client. Connected to a FreeOpcUa python server & a Mosquitto MQTT broker.
