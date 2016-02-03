@@ -1,6 +1,8 @@
 # OPC UA -> MQTT Gateway client
 
-This client software is made for transferring OPC UA node value data to a target MQTT broker.
+The purpose of this client software is to allow the transfer of OPC UA node value data to a target MQTT broker.
+
+I made it as an assignment for the class "network programming" at my school Seinäjoki University of Applied Sciences.
 
 ### Dependencies
 
@@ -17,9 +19,9 @@ I personally used Qt 5.5 & MinGW32 4.9.2 while developing this and I only provid
 
 ### Repository structure
 
-**client_qt_project**: This folder contains the source code of the client & Qt Creator project files.
-**images**: Contains images related to the gateway client project.
-**libraries**: This folder contains pre-compiled Windows library files for FreeOpcUa/Mosquitto & include headers.
+- **client_qt_project**: This folder contains the source code of the client & Qt Creator project files.
+- **images**: Contains images related to the gateway client project.
+- **libraries**: This folder contains pre-compiled Windows library files for FreeOpcUa/Mosquitto & include headers.
 
 ### UML Diagram, clientside relations
 
