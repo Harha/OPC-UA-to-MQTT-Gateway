@@ -719,6 +719,7 @@ void MainWindow::treeUpdateItem(QTreeWidgetItem *item, int slot)
         node_ns = QString::number(node_opcua.GetId().GetNamespaceIndex());
         node_name = QString::fromStdString(node_opcua.GetBrowseName().Name);
         node_value = QString::fromStdString(node_opcua.GetValue().ToString());
+
         if (node_value.startsWith("conversion"))
         {
             /* <-- Just testing... Beckhoff has many unsupported types.

@@ -51,6 +51,7 @@ public:
     OpcUa::EndpointDescription getTargetEndpoint() const;
     OpcUa::UaClient *getClient() const;
     OPCUASubClient *getSubClient() const;
+    std::map<std::string, std::unique_ptr<OpcUa::Subscription>> &getSubs();
     OpcUa::Node *getRootNode() const;
     OpcUa::Node *getObjectsNode() const;
     CLIENT_STATE getRunState() const;

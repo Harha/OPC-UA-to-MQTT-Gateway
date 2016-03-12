@@ -3,6 +3,7 @@
 #include "mqttclient.h"
 #include "coupleritem.h"
 #include <QDebug>
+#include <boost/thread.hpp>
 
 // --------------------------------------------------------
 // Callback client class below
@@ -19,6 +20,7 @@ void OPCUASubClient::DataChange(uint32_t handle, const OpcUa::Node& node, const 
     if (m_mqttclient->getStatus() == CONNECTED)
     {
         std::string strval = val.ToString();
+
         m_mqttclient->publish_message(std::to_string(node.GetId().GetNamespaceIndex()) + "/" + node.GetBrowseName().Name, strval.size(), (const void *) strval.c_str());
     }
 }
@@ -67,21 +69,30 @@ OPCUAClient::~OPCUAClient()
     }
 }
 
+// TODO: Handle subscriptions in some better way...
 void OPCUAClient::createOpcUaMqttLink(CouplerItem *item, int period)
 {
     OpcUa::Node node = item->getOpcUaNode();
-    m_subs.insert(std::pair<std::string, std::unique_ptr<OpcUa::Subscription>>(node.ToString(), m_client->CreateSubscription((unsigned int) period, *m_subclient)));
-    uint32_t handle = m_subs.at(node.ToString()).get()->SubscribeDataChange(node);
-    item->setSubHandle(handle);
+    std::string key = node.ToString();
+
+    if (getSubs().find(key) == getSubs().end() || item->getSubHandle() == 0)
+    {
+        getSubs()[key] = m_client->CreateSubscription((unsigned int) period, *m_subclient);
+        uint32_t handle = getSubs().at(key).get()->SubscribeDataChange(node);
+        item->setSubHandle(handle);
+    }
 }
 
-// TODO: Add getters for subscriptions and lock them with a mutex
 void OPCUAClient::removeOpcUaMqttLink(CouplerItem *item)
 {
-    OpcUa::Subscription *sub = m_subs.at(item->getOpcUaNode().ToString()).get();
-    sub->UnSubscribe(item->getSubHandle());
-    m_subs.erase(item->getOpcUaNode().ToString());
-    item->setSubHandle(0);
+    std::string key = item->getOpcUaNode().ToString();
+
+    if (getSubs().find(key) != getSubs().end())
+    {
+        OpcUa::Subscription *sub = getSubs().at(key).get();
+        sub->UnSubscribe(item->getSubHandle());
+        item->setSubHandle(0);
+    }
 }
 
 void OPCUAClient::requestEndpoints()
@@ -218,6 +229,13 @@ OpcUa::UaClient *OPCUAClient::getClient() const
 OPCUASubClient *OPCUAClient::getSubClient() const
 {
     return m_subclient;
+}
+
+boost::mutex mutex;
+std::map<std::string, std::unique_ptr<OpcUa::Subscription>> &OPCUAClient::getSubs()
+{
+    boost::lock_guard<boost::mutex> lock(mutex);
+    return m_subs;
 }
 
 OpcUa::Node *OPCUAClient::getRootNode() const

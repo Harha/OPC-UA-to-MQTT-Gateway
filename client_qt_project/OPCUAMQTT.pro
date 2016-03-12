@@ -1,3 +1,9 @@
+#-------------------------------------------------
+#
+# Project created by QtCreator 2015-12-18T23:23:40
+#
+#-------------------------------------------------
+
 QT     += core gui
 CONFIG += console
 
@@ -10,11 +16,11 @@ QMAKE_CXXFLAGS += -std=c++11 -Werror=return-type
 QMAKE_CXXFLAGS_RELEASE += -Ofast
 
 # Includes
-INCLUDEPATH += C:/boost # boost
+INCLUDEPATH += C:/boost/boost_mingw # boost
 INCLUDEPATH += ./include # freeopcua, mqtt
 
 # Libraries
-LIBS += -LC:/boost/stage/lib \ # boost
+LIBS += -LC:/boost/boost_mingw/stage/lib \ # boost
         -lws2_32 \ # winsock
         -lboost_system-mgw49-mt-d-1_60 # boost system
 
@@ -36,7 +42,7 @@ SOURCES += main.cpp\
     opcuaclient.cpp \
     coupleritem.cpp \
     mqttclient.cpp \
-    opcuaepwrappercpp.cpp
+    opcuaepwrapper.cpp
 
 HEADERS  += mainwindow.h \
     aboutdialog.h \
